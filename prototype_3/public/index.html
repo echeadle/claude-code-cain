@@ -2,81 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>prototype_3 — RadioCalico Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RadioCalico — Live Stream</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <h1>RadioCalico — Live Stream</h1>
+  <div id="backdrop"></div>
 
-  <audio id="player" controls></audio>
-  <p id="status">Loading stream…</p>
+  <div class="page">
+    <header class="hero">
+      <div class="logo-circle">🐾</div>
+      <h1>RadioCalico</h1>
+      <p class="tagline">24-bit / 48kHz lossless &middot; ad-free &middot; data-free</p>
+      <button id="listen-btn" class="btn-primary">▶ Listen Now</button>
+      <audio id="player" controls></audio>
+      <p id="status">Loading stream…</p>
+    </header>
 
-  <section id="now-playing">
-    <h2>Now Playing</h2>
-    <p id="np-title">—</p>
-    <p id="np-artist"></p>
-    <p id="np-album"></p>
-  </section>
+    <main>
+      <section class="now-playing card">
+        <h2>Now Playing</h2>
+        <div class="now-playing-body">
+          <img id="np-cover" alt="Album art" src="">
+          <div class="np-info">
+            <p id="np-title" class="np-title">—</p>
+            <p id="np-artist" class="np-artist"></p>
+            <p id="np-album" class="np-album"></p>
+          </div>
+        </div>
+      </section>
 
-  <section id="recently-played">
-    <h2>Recently Played</h2>
-    <ol id="rp-list"></ol>
-  </section>
+      <section class="recently-played card">
+        <h2>Recently Played</h2>
+        <ol id="rp-list"></ol>
+      </section>
+    </main>
+
+    <footer>
+      <p>RadioCalico — kick back, enjoy the crystal-clear audio.</p>
+    </footer>
+  </div>
 
   <script src="/vendor/hls.min.js"></script>
-  <script>
-    const STREAM_URL = 'https://d3d4yli4hf5bmh.cloudfront.net/hls/live.m3u8';
-    const audio = document.getElementById('player');
-    const status = document.getElementById('status');
-
-    if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-      // Native HLS support (e.g. Safari)
-      audio.src = STREAM_URL;
-      status.textContent = 'Ready (native HLS).';
-    } else if (window.Hls && Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(STREAM_URL);
-      hls.attachMedia(audio);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        status.textContent = 'Ready (hls.js).';
-      });
-      hls.on(Hls.Events.ERROR, (event, data) => {
-        if (data.fatal) {
-          status.textContent = `Stream error: ${data.type}`;
-        }
-      });
-    } else {
-      status.textContent = 'HLS playback is not supported in this browser.';
-    }
-
-    async function refreshNowPlaying() {
-      let data;
-      try {
-        const response = await fetch('/api/now-playing');
-        data = await response.json();
-      } catch (err) {
-        return;
-      }
-
-      document.getElementById('np-title').textContent = data.title || 'Unknown title';
-      document.getElementById('np-artist').textContent = data.artist || 'Unknown artist';
-      document.getElementById('np-album').textContent = data.album
-        ? `${data.album}${data.date ? ' (' + data.date + ')' : ''}`
-        : '';
-
-      const list = document.getElementById('rp-list');
-      list.textContent = '';
-      for (let i = 1; i <= 5; i++) {
-        const prevArtist = data[`prev_artist_${i}`];
-        const prevTitle = data[`prev_title_${i}`];
-        if (!prevArtist && !prevTitle) continue;
-        const li = document.createElement('li');
-        li.textContent = `${prevTitle || 'Unknown title'} — ${prevArtist || 'Unknown artist'}`;
-        list.appendChild(li);
-      }
-    }
-
-    refreshNowPlaying();
-    setInterval(refreshNowPlaying, 15000);
-  </script>
+  <script src="/app.js"></script>
 </body>
 </html>

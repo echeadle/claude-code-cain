@@ -1,0 +1,197 @@
+:root {
+  --mint: #D8F2D5;
+  --forest: #1F4E23;
+  --teal: #38A29D;
+  --orange: #EFA63C;
+  --charcoal: #231F20;
+  --cream: #F5EADA;
+  --white: #FFFFFF;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--cream);
+  background: var(--charcoal);
+}
+
+#backdrop {
+  position: fixed;
+  inset: -60px;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--charcoal);
+  filter: blur(50px) brightness(0.45);
+  transition: background-image 0.8s ease;
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+}
+
+.hero {
+  text-align: center;
+  padding-bottom: 32px;
+}
+
+.logo-circle {
+  width: 96px;
+  height: 96px;
+  line-height: 96px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--mint);
+  border: 3px solid var(--forest);
+  font-size: 2.5rem;
+}
+
+h1 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  color: var(--white);
+  margin: 0 0 8px;
+}
+
+.tagline {
+  color: var(--mint);
+  margin: 0 0 24px;
+}
+
+.btn-primary {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  background: var(--forest);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--teal);
+}
+
+audio {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 20px auto 8px;
+  accent-color: var(--teal);
+}
+
+#status {
+  font-size: 0.9rem;
+  color: var(--mint);
+  margin: 0;
+}
+
+.card {
+  background: var(--cream);
+  color: var(--charcoal);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.card h2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--forest);
+  margin: 0 0 16px;
+}
+
+.now-playing-body {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+#np-cover {
+  width: 140px;
+  height: 140px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--mint);
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.np-title {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin: 0 0 6px;
+}
+
+.np-artist {
+  font-size: 1.05rem;
+  margin: 0 0 4px;
+}
+
+.np-album {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0;
+}
+
+#rp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#rp-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(31, 78, 35, 0.15);
+  font-size: 0.95rem;
+}
+
+#rp-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.rp-title {
+  font-weight: 600;
+}
+
+.rp-artist {
+  color: #555;
+}
+
+footer {
+  text-align: center;
+  margin-top: 40px;
+  color: var(--mint);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 480px) {
+  .now-playing-body {
+    flex-direction: column;
+    text-align: center;
+  }
+}
