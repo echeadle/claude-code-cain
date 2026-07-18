@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>prototype_3 — RadioCalico Player</title>
+</head>
+<body>
+  <h1>RadioCalico — Live Stream</h1>
+
+  <audio id="player" controls></audio>
+  <p id="status">Loading stream…</p>
+
+  <script src="/vendor/hls.min.js"></script>
+  <script>
+    const STREAM_URL = 'https://d3d4yli4hf5bmh.cloudfront.net/hls/live.m3u8';
+    const audio = document.getElementById('player');
+    const status = document.getElementById('status');
+
+    if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+      // Native HLS support (e.g. Safari)
+      audio.src = STREAM_URL;
+      status.textContent = 'Ready (native HLS).';
+    } else if (window.Hls && Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(STREAM_URL);
+      hls.attachMedia(audio);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        status.textContent = 'Ready (hls.js).';
+      });
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          status.textContent = `Stream error: ${data.type}`;
+        }
+      });
+    } else {
+      status.textContent = 'HLS playback is not supported in this browser.';
+    }
+  </script>
+</body>
+</html>
