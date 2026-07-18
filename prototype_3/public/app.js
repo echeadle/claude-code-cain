@@ -33,6 +33,63 @@ listenBtn.addEventListener('click', () => {
 });
 
 let lastCoverKey = null;
+let currentSong = { artist: '', title: '', album: '' };
+
+const thumbsUpBtn = document.getElementById('thumbs-up');
+const thumbsDownBtn = document.getElementById('thumbs-down');
+const thumbsUpCount = document.getElementById('thumbs-up-count');
+const thumbsDownCount = document.getElementById('thumbs-down-count');
+const ratingStatus = document.getElementById('rating-status');
+
+function renderRating(data) {
+  thumbsUpCount.textContent = data.thumbs_up ?? 0;
+  thumbsDownCount.textContent = data.thumbs_down ?? 0;
+
+  const rated = Boolean(data.user_rating);
+  thumbsUpBtn.disabled = rated;
+  thumbsDownBtn.disabled = rated;
+  thumbsUpBtn.classList.toggle('selected', data.user_rating === 'up');
+  thumbsDownBtn.classList.toggle('selected', data.user_rating === 'down');
+  ratingStatus.textContent = rated ? 'Thanks for rating this song!' : '';
+}
+
+async function refreshRating() {
+  if (!currentSong.artist || !currentSong.title) return;
+  try {
+    const url = new URL('/api/rating', window.location.origin);
+    url.searchParams.set('artist', currentSong.artist);
+    url.searchParams.set('title', currentSong.title);
+    const response = await fetch(url);
+    const data = await response.json();
+    renderRating(data);
+  } catch (err) {
+    // leave last known rating state on screen
+  }
+}
+
+async function submitRating(rating) {
+  thumbsUpBtn.disabled = true;
+  thumbsDownBtn.disabled = true;
+  try {
+    const response = await fetch('/api/rate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...currentSong, rating }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      ratingStatus.textContent = data.message || 'Could not submit rating.';
+    }
+    renderRating(data);
+  } catch (err) {
+    ratingStatus.textContent = 'Rating service unreachable.';
+    thumbsUpBtn.disabled = false;
+    thumbsDownBtn.disabled = false;
+  }
+}
+
+thumbsUpBtn.addEventListener('click', () => submitRating('up'));
+thumbsDownBtn.addEventListener('click', () => submitRating('down'));
 
 async function refreshNowPlaying() {
   let data;
@@ -48,6 +105,9 @@ async function refreshNowPlaying() {
   document.getElementById('np-album').textContent = data.album
     ? `${data.album}${data.date ? ' (' + data.date + ')' : ''}`
     : '';
+
+  currentSong = { artist: data.artist || '', title: data.title || '', album: data.album || '' };
+  refreshRating();
 
   const coverKey = `${data.artist || ''}|${data.title || ''}|${data.album || ''}`;
   if (coverKey !== lastCoverKey) {

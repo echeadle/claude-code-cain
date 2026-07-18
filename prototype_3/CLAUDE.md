@@ -8,6 +8,8 @@ RadioCalico (see `calico/` at the repo root for brand assets and the stream URL)
 
 - Web server: Express.js (Node.js)
 - Player: `hls.js` (npm package, served locally at `/vendor/hls.min.js` — not a CDN)
+- Backend API: Flask (Python, via `uv`) + SQLite — same Express+Flask+SQLite split as
+  `prototype_2`, added specifically for song ratings (a separate DB from `prototype_2`'s)
 
 ## Purpose
 
@@ -26,6 +28,25 @@ Album art is loaded client-side directly from `https://d3d4yli4hf5bmh.cloudfront
 (cache-busted with a `?t=` timestamp query param, refreshed only when the track actually
 changes) — no proxy needed since plain `<img>`/`background-image` loads don't require CORS.
 
+## Song Ratings
+
+Thumbs up/down on the currently playing song, with running totals from all listeners. No login
+system exists yet, so "one rating per user" is enforced against an anonymous `visitor_id`
+cookie (random UUID, httpOnly, set by Express on first visit) rather than a real account —
+revisit this once the real app has auth.
+
+- Flask (`prototype_3/backend/app.py`): `songs` table keyed by `UNIQUE(artist, title)` with
+  running `thumbs_up`/`thumbs_down` counters; `ratings` table with `UNIQUE(song_id, visitor_id)`
+  to reject a second vote from the same visitor (409 on retry, message + current tally returned).
+  `GET /api/songs/rating?artist=&title=&visitor_id=` returns counts + this visitor's existing
+  vote (if any); `POST /api/songs/rate` casts a vote.
+- Express proxies both (`GET /api/rating`, `POST /api/rate`), attaching/creating the
+  `visitor_id` cookie so the browser never talks to Flask directly — same pattern as the
+  now-playing metadata proxy.
+- Frontend: thumbs buttons in the Now Playing widget, disabled once voted, re-synced on every
+  15s now-playing poll (so counts reflect other listeners' votes too, and the buttons reset —
+  enabled, unselected — as soon as the track changes).
+
 ## Design
 
 Page is styled per `calico/RadioCalico_Style_Guide.txt`: CSS variables for the brand palette
@@ -36,9 +57,15 @@ art (`#backdrop`, updates alongside the Now Playing widget). Structure: `public/
 
 ## Running Locally
 
+Backend (Flask + SQLite), from `prototype_3/backend/`:
+```
+uv run python app.py    # runs on http://127.0.0.1:5000
+```
+
+Frontend (Express), from `prototype_3/`:
 ```
 npm start    # Express server on http://localhost:3000 (npm run dev for auto-reload)
 ```
-Health check: `curl http://localhost:3000/health`
+Health check: `curl http://localhost:3000/health`. Start the backend before the frontend.
 
 Open `http://localhost:3000/` in a browser and press play to hear the live stream.
