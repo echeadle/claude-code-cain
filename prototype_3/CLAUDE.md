@@ -16,6 +16,12 @@ stream at `https://d3d4yli4hf5bmh.cloudfront.net/hls/live.m3u8` (from `calico/st
 Uses native HLS support where available (Safari), falls back to `hls.js` elsewhere. The stream's
 master playlist offers a lossless FLAC variant and an AAC fallback variant.
 
+Also includes a "Now Playing" widget (current artist/title/album) and a "Recently Played"
+widget (last 5 tracks), polling `GET /api/now-playing` every 15s. That route is an Express
+server-side proxy to `https://d3d4yli4hf5bmh.cloudfront.net/metadatav2.json` — the metadata
+host doesn't send CORS headers, so the browser can't fetch it directly; Express fetches it
+server-side and forwards the JSON.
+
 ## Running Locally
 
 ```
