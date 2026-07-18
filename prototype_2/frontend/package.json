@@ -1,0 +1,18 @@
+{
+  "name": "prototype_2-frontend",
+  "version": "1.0.0",
+  "description": "Express frontend for prototype_2 (talks to Flask API backend)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
