@@ -34,6 +34,13 @@ Proxied backend check: `curl http://localhost:3000/api-status`
 
 Start the backend before the frontend so `/api-status` has something to reach.
 
+## Features
+
+- **Add user** — `http://localhost:3000/add-user` shows a form (username, email). Submitting
+  POSTs to Express `/users`, which forwards to Flask `POST /api/users`. Flask validates
+  non-empty fields and basic email format, then inserts into the SQLite `users` table
+  (`username` and `email` both UNIQUE — duplicates return a 409).
+
 ## Architecture
 
 Express (frontend) is the only server the browser talks to directly for the page itself; it
