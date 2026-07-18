@@ -1,5 +1,5 @@
 {
-  "name": "claude-code-zane",
+  "name": "claude-code-cain",
   "version": "1.0.0",
   "description": "Udemy Claude Code course project - online radio station app",
   "main": "server.js",
@@ -10,16 +10,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/echeadle/claude-code-zane.git"
+    "url": "git+https://github.com/echeadle/claude-code-cain.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/echeadle/claude-code-zane/issues"
+    "url": "https://github.com/echeadle/claude-code-cain/issues"
   },
-  "homepage": "https://github.com/echeadle/claude-code-zane#readme",
+  "homepage": "https://github.com/echeadle/claude-code-cain#readme",
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
