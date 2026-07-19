@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RadioCalico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <span class="topbar-text">Radio</span>
+    <img class="topbar-logo" src="/logo.png" alt="RadioCalico logo">
+    <span class="topbar-text">Calico</span>
+  </header>
+
+  <main class="content">
+    <div class="cover-wrap">
+      <img id="np-cover" class="cover-art" alt="Album art" src="">
+    </div>
+
+    <div class="track-info">
+      <h1 id="np-artist" class="np-artist">—</h1>
+      <h2 id="np-title" class="np-title">—</h2>
+      <h3 id="np-album" class="np-album"></h3>
+
+      <p class="quality">
+        <span id="quality-source">Source quality: —</span><br>
+        <span id="quality-stream">Stream quality: 48kHz FLAC / HLS Lossless</span>
+      </p>
+
+      <p class="rate-line">
+        Rate this track:
+        <button id="thumbs-up" class="thumb-btn" type="button" aria-label="Thumbs up" disabled title="Ratings coming soon">👍</button>
+        <button id="thumbs-down" class="thumb-btn" type="button" aria-label="Thumbs down" disabled title="Ratings coming soon">👎</button>
+      </p>
+
+      <div class="player-bar">
+        <button id="play-btn" class="play-btn" type="button" aria-label="Play">▶</button>
+        <span id="time-display" class="time-display">0:00 / Live</span>
+        <button id="mute-btn" class="mute-btn" type="button" aria-label="Mute">🔊</button>
+        <input id="volume" class="volume" type="range" min="0" max="1" step="0.01" value="1">
+      </div>
+      <audio id="player"></audio>
+    </div>
+  </main>
+
+  <section class="previous-tracks">
+    <h4>Previous tracks:</h4>
+    <ol id="rp-list"></ol>
+  </section>
+
+  <script src="/vendor/hls.min.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
