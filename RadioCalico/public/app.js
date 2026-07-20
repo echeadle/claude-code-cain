@@ -79,6 +79,10 @@ async function refreshNowPlaying() {
     ? `Source quality: ${data.bit_depth}-bit ${(data.sample_rate / 1000).toFixed(1)}kHz`
     : 'Source quality: —';
 
+  document.getElementById('quality-stream').textContent = data.sample_rate
+    ? `Stream quality: ${(data.sample_rate / 1000).toFixed(1)}kHz FLAC / HLS Lossless`
+    : 'Stream quality: —';
+
   const coverKey = `${data.artist || ''}|${data.title || ''}|${data.album || ''}`;
   if (coverKey !== lastCoverKey) {
     lastCoverKey = coverKey;
